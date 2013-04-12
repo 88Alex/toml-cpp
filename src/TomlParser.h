@@ -7,27 +7,36 @@ class TomlElement
 {
     private:
         string name;
-        string type;
-        TomlElement parent;
+        TomlElement parent;//null if its parent is the root
     public:
-        TomlElement getParent();
-        string getName();
-        string getFullName();
-        TomlElement(string name_, TomlElement parent_, string type);
+        virtual TomlElement getParent() = 0;//pure virtual function!
+        virtual string getName();
+        virtual string getFullName();
+}
+
+class TomlKey : TomlElement
+{
+    private:
+        string type;//All caps, short form i.e. STRING, NUMBER, BOOL, DATE.
+        string value;
+    public:
+        string getType();
+        string getValue();//You can parse it afterwards.
+        TomlKey(string name_, string type_, string value_);
 }
 
 class TomlArray : TomlElement
 {
     public:
         TomlElement[] getArrayElements();
-        TomlArray(string name_, TomlElement parent_)
+        TomlArray(string name_, TomlElement parent_);
 }
 
 class TomlHash : TomlElement
 {
     public:
         TomlElement[] getHashElements();
-        TomlHash getParentHash();
+        TomlHash(string name_, TomlElement parent_);
 }
 
 class TomlParser
@@ -36,7 +45,7 @@ class TomlParser
         static fstream stream;
     public:
         static void setFile(string name);
-        static TomlElement getRootElement();//from there, it's on
+        static void load();
 }
 
 #endif //TOMLPARSER
