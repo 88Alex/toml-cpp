@@ -1,0 +1,11 @@
+[clientside]
+client_ips=["124.25.2.0","154.5.34.12"]
+connected=false
+connection_limit = 5000 #I'm deliberately using different styles
+[clientside.systems]
+system_pid=142
+system_index=12345
+[serverside]
+server_ips=["212.0.1.14"]
+connected=false
+connection_limit = 10000
