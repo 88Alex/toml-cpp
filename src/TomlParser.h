@@ -30,6 +30,8 @@ class TomlArray : TomlElement
     public:
         TomlElement[] getArrayElements();
         TomlArray(string name_, TomlElement parent_);
+        string getType();//always returns "ARRAY"
+        TomlKey[] getElements();
 }
 
 class TomlHash : TomlElement
@@ -37,6 +39,8 @@ class TomlHash : TomlElement
     public:
         TomlElement[] getHashElements();
         TomlHash(string name_, TomlElement parent_);
+        string getType();//always returns "HASH"
+        TomlElement[] getChildElements();
 }
 
 class TomlParser
