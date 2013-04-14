@@ -2,6 +2,7 @@
 #define TOMLPARSER
 #include <iostream>
 #include <fstream>
+#include <vector>
 
 class TomlElement
 {
@@ -9,9 +10,11 @@ class TomlElement
         string name;
         TomlElement parent;//null if its parent is the root
     public:
-        virtual TomlElement getParent() = 0;//pure virtual function!
+        virtual TomlElement getParent();
         virtual string getName();
         virtual string getFullName();
+        //constructor deliberately left out.
+        friend class TomlParser;
 }
 
 class TomlKey : TomlElement
@@ -23,24 +26,29 @@ class TomlKey : TomlElement
         string getType();
         string getValue();//You can parse it afterwards.
         TomlKey(string name_, string type_, string value_);
+        friend class TomlParser;
 }
 
 class TomlArray : TomlElement
 {
+    private:
+        vector<TomlElement> elements;
     public:
-        TomlElement[] getArrayElements();
-        TomlArray(string name_, TomlElement parent_);
+        vector<TomlElement> getArrayElements();
+        TomlArray(string name_, TomlElement parent_, vector<TomlElement> elements_);
         string getType();//always returns "ARRAY"
-        TomlKey[] getElements();
+        friend class TomlParser;
 }
 
 class TomlHash : TomlElement
 {
+    private:
+        vector<TomlElement> elements;
     public:
-        TomlElement[] getHashElements();
-        TomlHash(string name_, TomlElement parent_);
+        vector<TomlElement> getHashElements();
+        TomlHash(string name_, TomlElement parent_, vector<TomlElement> elements_);
         string getType();//always returns "HASH"
-        TomlElement[] getChildElements();
+        friend class Tomlparser;
 }
 
 class TomlParser
@@ -49,7 +57,7 @@ class TomlParser
         static fstream stream;
     public:
         static void setFile(string name);
-        static void load();
+        static void load();//this is where everything's done
 }
 
 #endif //TOMLPARSER
