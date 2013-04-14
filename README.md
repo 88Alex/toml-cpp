@@ -12,43 +12,25 @@ Well, how does it work?
 Simple. Here is a sample:
 
     #include "TomlParser.h"
-
     ...
-
     TomlParser.setFile("example.toml");
-
     TomlParser.load();
-
     TomlElement[] elements = TomlParser.getElements();
-
     for(int i=0; i<(sizeof elements); i++)
-
     {
-
-    cout << elements[i].getName();
-
-    if(elements[i].getType()=="ARRAY")
-
-    {
-
-    TomlArray array = dynamic_cast<TomlArray>(elements[i]);
-
-    TomlKey[] arrayElements = array.getElements();
-    
-    //...
-    
-    }
-  
-    else if(elements[i].getType()=="HASH")
-  
-    {
-    
-    TomlHash hash = dynamic_cast<TomlHash>(elements[i]);
-    
-    TomlElement[]  hashElements = hash.getChildElements();
-  
-    }
-
+        cout << elements[i].getName() << endl;
+        if(elements[i].getType()=="ARRAY")
+        {
+            TomlArray array = dynamic_cast<TomlArray>(elements[i]);
+            TomlElement[] arrayElements = array.getElements();
+            //...
+        }
+        else if(elements[i].getType()=="HASH")
+        {
+            TomlHash hash = dynamic_cast<TomlHash>(elements[i]);
+            TomlElement[]  hashElements = hash.getChildElements();
+            //....
+        }
     }
 
 (Please forgive me for my sloppy indentation. The markdown format isn't really cooperative with this.)
