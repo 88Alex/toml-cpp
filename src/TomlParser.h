@@ -13,9 +13,11 @@ class TomlParser
 {
     private:
         static fstream stream;
+        static vector<TomlElement> elements;
     public:
         static void setFile(string name);
         static void load();//this is where everything's done
+        static vector<TomlElement> getElements();
 }
 
 #endif //TOMLPARSER

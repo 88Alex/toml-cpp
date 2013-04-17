@@ -6,7 +6,7 @@ class TomlArray : TomlElement
     private:
         vector<TomlElement> elements;
     public:
-        vector<TomlElement> getArrayElements();
+        vector<TomlElement> getElements();
         TomlArray(string name_, TomlElement parent_, vector<TomlElement> elements_);
         string getType();//always returns "ARRAY"
         friend class TomlParser;

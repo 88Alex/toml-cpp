@@ -9,7 +9,7 @@ class TomlKey : TomlElement
     public:
         string getType();
         string getValue();//You can parse it afterwards.
-        TomlKey(string name_, string type_, string value_);
+        TomlKey(string name_, string type_, string value_, TomlElement parent_);
         friend class TomlParser;
 }
 

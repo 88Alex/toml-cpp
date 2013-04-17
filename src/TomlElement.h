@@ -10,6 +10,7 @@ class TomlElement
         virtual TomlElement getParent();
         virtual string getName();
         virtual string getFullName();
+        virtual string getType() = 0;
         //constructor deliberately left out.
         friend class TomlParser;
 }
