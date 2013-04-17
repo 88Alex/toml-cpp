@@ -15,25 +15,23 @@ Simple. Here is a sample:
     ...
     TomlParser.setFile("example.toml");
     TomlParser.load();
-    TomlElement[] elements = TomlParser.getElements();
-    for(int i=0; i<(sizeof elements); i++)
+    vector<TomlElement> elements = TomlParser.getElements();
+    for(int i=0; i<elements.size(); i++)
     {
         cout << elements[i].getName() << endl;
         if(elements[i].getType()=="ARRAY")
         {
             TomlArray array = dynamic_cast<TomlArray>(elements[i]);
-            TomlElement[] arrayElements = array.getElements();
+            vector<TomlElement> arrayElements = array.getElements();
             //...
         }
         else if(elements[i].getType()=="HASH")
         {
             TomlHash hash = dynamic_cast<TomlHash>(elements[i]);
-            TomlElement[]  hashElements = hash.getChildElements();
+            vector<TomlElement>  hashElements = hash.getHashElements();
             //....
         }
     }
-
-(Please forgive me for my sloppy indentation. The markdown format isn't really cooperative with this.)
 
 Wow. Never thought it would be so simple.
 ========
@@ -48,8 +46,8 @@ Part of what makes Toml-C++ so simple is that there are only 5 classes.
 There is the TomlParser class, which has several static methods useful for you. You saw some of these in action.
 There is the TomlElement class, an abstract class representing a TOML element.
 There is the TomlKey class, which represents a TOML key.
-There is the TomlArray class, which is self-explanatory.
-And there is the TomlHash class, which is just as self-explanatory.
+There is the TomlArray class, which represents a TOML array.
+And there is the TomlHash class, which represents a TOML hash.
 
 By the way, the TomlKey, TomlArray, and TomlHash classes are super-classes of the TomlElement class.
 
@@ -70,10 +68,13 @@ Method summary:
 
 `setFile(string)`: sets the file to the file indicated in the string.
 You don't even have to pass it a file object. Toml-C++ does that for you.
+No return value.
 
 `load()`: now this is one fun method. It loads everything from the TOML file into the data structure.
+No return value.
 
 `getElements()`: retrieves all the fundamental-level elements from the data structure.
+Returns an object of type `vector<TomlElement>`.
 
 TomlElement
 -----------
@@ -100,6 +101,7 @@ Method summary:
 
 `getValue()`: returns the value.
 
+(Note: extends TomlElement)
 
 TomlArray
 ---------
@@ -110,6 +112,8 @@ Method summary:
 
 `getElements()`: returns a vector containing all the elements of the array.
 
+(Note: extends TomlElement)
+
 TomlHash
 --------
 
@@ -119,6 +123,6 @@ Method summary:
 
 `getHashElements()`: returns a vector containing all the elements inside the hash.
 
-Note: Please remember that the TomlKey, TomlArray, and TomlHash classes are superclasses of the TomlElement class.
+(Note: extends TomlElement)
 
 And that's it! Good luck with your programming!
