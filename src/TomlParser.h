@@ -4,10 +4,13 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
 #include "TomlElement.h"
 #include "TomlKey.h"
 #include "TomlArray.h"
 #include "TomlHash.h"
+
+using namespace std;
 
 class TomlParser
 {
@@ -18,6 +21,6 @@ class TomlParser
         static void setFile(string name);
         static void load();//this is where everything's done
         static vector<TomlElement> getElements();
-}
+};
 
 #endif //TOMLPARSER

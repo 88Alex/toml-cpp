@@ -1,5 +1,9 @@
 #ifndef TOML_ARRAY
 #define TOML_ARRAY
+#include <string>
+#include <vector>
+
+using namespace std;
 
 class TomlArray : TomlElement
 {
@@ -10,6 +14,6 @@ class TomlArray : TomlElement
         TomlArray(string name_, TomlElement parent_, vector<TomlElement> elements_);
         string getType();//always returns "ARRAY"
         friend class TomlParser;
-}
+};
 
 #endif //TOML_ARRAY

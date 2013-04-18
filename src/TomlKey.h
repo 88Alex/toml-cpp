@@ -1,6 +1,8 @@
 #ifndef TOML_KEY
 #define TOML_KEY
 
+using namespace std;
+
 class TomlKey : TomlElement
 {
     private:
@@ -11,6 +13,6 @@ class TomlKey : TomlElement
         string getValue();//You can parse it afterwards.
         TomlKey(string name_, string type_, string value_, TomlElement parent_);
         friend class TomlParser;
-}
+};
 
 #endif //TOML_KEY
