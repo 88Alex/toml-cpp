@@ -126,3 +126,8 @@ Method summary:
 (Note: extends TomlElement)
 
 And that's it! Good luck with your programming!
+
+Known Flaws
+========
+
+- Cannot parse strings and arrays- YET! This will be fixed soon.
