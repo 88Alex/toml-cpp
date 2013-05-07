@@ -151,7 +151,7 @@ static void TomlParser::load()
                         {
                             long value = parseInteger(valueStr);
                             currElement.value = valueStr;
-                            currElement.type = "INTEGER";
+                            currElement.type = "INT";
                         }
                         catch(int i)
                         {
@@ -166,7 +166,7 @@ static void TomlParser::load()
                                     {
                                         double value = parseDouble(line.substr(valueStr));
                                         currElement.value = valueStr;
-                                        currElement.type = "DOUBLE";
+                                        currElement.type = "FLOAT";
                                         catch(int i)
                                         {
                                             //now it's not a built-in type
