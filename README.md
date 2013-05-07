@@ -41,13 +41,14 @@ Well, thanks.
 Anyway, what are all the classes?
 ========
 
-Part of what makes Toml-C++ so simple is that there are only 5 classes.
+Part of what makes Toml-C++ so simple is that there are only 6 classes.
 
 There is the TomlParser class, which has several static methods useful for you. You saw some of these in action.
 There is the TomlElement class, an abstract class representing a TOML element.
 There is the TomlKey class, which represents a TOML key.
 There is the TomlArray class, which represents a TOML array.
-And there is the TomlHash class, which represents a TOML hash.
+There is the TomlHash class, which represents a TOML hash.
+And there is the TomlError class, which represents a TOML error.
 
 By the way, the TomlKey, TomlArray, and TomlHash classes are super-classes of the TomlElement class.
 
@@ -66,12 +67,26 @@ A class with some static methods for TOML file parsing
 
 Method summary:
 
+`parseInteger(string)`: parses an integer.
+Returns a long (64-bit) integer.
+
+`parseBoolean(string)`: parses a boolean.
+Returns a bool value.
+
+`parseDouble(string)`: parses a double.
+Returns a double (64-bit floating-point).
+
+`clipSpaces(string&)`: clips all the spaces from a string.
+No return value.
+NOTE: This method is public, but only used internally.
+
 `setFile(string)`: sets the file to the file indicated in the string.
 You don't even have to pass it a file object. Toml-C++ does that for you.
 No return value.
 
 `load()`: now this is one fun method. It loads everything from the TOML file into the data structure.
 No return value.
+Throws: TomlError.
 
 `getElements()`: retrieves all the fundamental-level elements from the data structure.
 Returns an object of type `vector<TomlElement>`.
