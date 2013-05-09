@@ -28,6 +28,7 @@ static long TomlParser::parseInteger(string text)
             throw 1; // 1 = Error parsing integer
         }
     }
+    return isNegative ? -currNumber : currNumber;
 }
 static bool TomlParser::parseBoolean(string text)
 {
@@ -37,7 +38,45 @@ static bool TomlParser::parseBoolean(string text)
 }
 static double TomlParser::parseDouble(string text)
 {
-    //
+    bool isDecimal = false, isNegative = false;
+    int index = 0, level = 1;
+    char currChar = text.at(index);
+    if(currChar == '+')
+    {
+        index++;
+        currChar = text.at(index);
+    }
+    else if(currChar == '-')
+    {
+        isNegative = true;
+        index++;
+        currChar = text.at(index);
+    }
+    for(; index < text.length(); index++, currChar = text.at(index))
+    {
+        if(48 <= currChar && currChar <= 57)
+        {
+            if(!isDecimal)
+            {
+                currNumber *= 10;
+                currNumber += (currChar - 48);
+            }
+            else
+            {
+                double factor = 1;
+                for(int i = 1; i <= level; i++, factor /= 10) ;
+                currNumber += factor * (currChar - 48);
+            }
+        }
+        else if(currChar == '.')
+        {
+            isDecimal = true;
+        }
+        else
+        {
+            throw 3; // 3 = Error parsing double
+        }
+    }
 }
 static void TomlParser::clipSpaces(string& text)
 {
@@ -106,6 +145,10 @@ static void TomlParser::load()
                     currStr.append(1,currChar);
                 }
             }
+            else if(endOfStrMode)
+            {
+                goto eos;
+            }
             else
             {
                 switch(currChar)
@@ -130,6 +173,7 @@ static void TomlParser::load()
                         endOfLine = true;
                         break;
                     default://it's a key
+                    eos:
                         if(endOfStrMode)
                         {
                             currElement.type = "STRING";
@@ -146,30 +190,27 @@ static void TomlParser::load()
                         i++;//we go past the =
                         currChar = currLine.at(i);
                         valueStr = line.substr(i + 1);
-                        currElement = new TomlElement(name, "");
                         try
                         {
                             long value = parseInteger(valueStr);
-                            currElement.value = valueStr;
-                            currElement.type = "INTEGER";
+                            currElement = new TomlKey(name, valueStr, "INTEGER", currHash);
                         }
                         catch(int i)
                         {
                             try//This is the only way
                             {
                                 bool value = parseBoolean(valueStr);
-                                currElement.value = valueStr;
-                                currElement.type = "BOOL";
+                                currElement = new TomlKey(name, valueStr, "BOOL", currHash);
                                 catch(int i)
                                 {
                                     try
                                     {
                                         double value = parseDouble(line.substr(valueStr));
                                         currElement.value = valueStr;
-                                        currElement.type = "DOUBLE";
+                                        currElement = new TomlKey(name, valueStr, "FLOAT", currHash);
                                         catch(int i)
                                         {
-                                            //now it's not a built-in type
+                                            //ignore it
                                         }
                                     }
                                 }
