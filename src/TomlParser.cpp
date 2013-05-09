@@ -193,7 +193,12 @@ static void TomlParser::load()
                         try
                         {
                             long value = parseInteger(valueStr);
+<<<<<<< HEAD
                             currElement = new TomlKey(name, valueStr, "INTEGER", currHash);
+=======
+                            currElement.value = valueStr;
+                            currElement.type = "INT";
+>>>>>>> 139847311159cd4858c4219fe76415af6676b177
                         }
                         catch(int i)
                         {
@@ -207,7 +212,11 @@ static void TomlParser::load()
                                     {
                                         double value = parseDouble(line.substr(valueStr));
                                         currElement.value = valueStr;
+<<<<<<< HEAD
                                         currElement = new TomlKey(name, valueStr, "FLOAT", currHash);
+=======
+                                        currElement.type = "FLOAT";
+>>>>>>> 139847311159cd4858c4219fe76415af6676b177
                                         catch(int i)
                                         {
                                             //ignore it

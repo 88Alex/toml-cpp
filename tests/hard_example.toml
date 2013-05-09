@@ -32,3 +32,4 @@ test_string = "You'll hate me after this - #"          # " Annoying, isn't it?
 #         and here"
 #         ]     End of array comment, forgot the #
 #number = 3.14  pi <--again forgot the # 
+#array2 = [1.0, 2, 3.0] # No type mixing!
