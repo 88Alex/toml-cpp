@@ -3,6 +3,8 @@ Toml-C++
 
 A simple C++ parser/module for TOML.
 
+For more information on TOML, see http://www.github.com/mojombo/toml.
+
 Toml-C++ is compliant with TOML v0.1.0.
 Should the next version of TOML be released, Toml-C++ will be updated accordingly within 10 days.
 
@@ -11,27 +13,29 @@ Well, how does it work?
 
 Simple. Here is a sample:
 
-    #include "TomlParser.h"
-    ...
-    TomlParser.setFile("example.toml");
-    TomlParser.load();
-    vector<TomlElement> elements = TomlParser.getElements();
-    for(int i=0; i<elements.size(); i++)
+```cpp
+#include "TomlParser.h"
+...
+TomlParser.setFile("example.toml");
+TomlParser.load();
+vector<TomlElement> elements = TomlParser.getElements();
+for(int i=0; i<elements.size(); i++)
+{
+    cout << elements[i].getName() << endl;
+    if(elements[i].getType()=="ARRAY")
     {
-        cout << elements[i].getName() << endl;
-        if(elements[i].getType()=="ARRAY")
-        {
-            TomlArray array = dynamic_cast<TomlArray>(elements[i]);
-            vector<TomlElement> arrayElements = array.getElements();
-            //...
-        }
-        else if(elements[i].getType()=="HASH")
-        {
-            TomlHash hash = dynamic_cast<TomlHash>(elements[i]);
-            vector<TomlElement>  hashElements = hash.getHashElements();
-            //....
-        }
+        TomlArray array = dynamic_cast<TomlArray>(elements[i]);
+        vector<TomlElement> arrayElements = array.getElements();
+        //...
     }
+    else if(elements[i].getType()=="HASH")
+    {
+        TomlHash hash = dynamic_cast<TomlHash>(elements[i]);
+        vector<TomlElement>  hashElements = hash.getHashElements();
+        //....
+    }
+}
+```
 
 Wow. Never thought it would be so simple.
 ========
@@ -145,4 +149,4 @@ And that's it! Good luck with your programming!
 Known Flaws
 ========
 
-- Cannot parse strings and arrays- YET! This will be fixed soon.
+[ ] Cannot parse arrays- YET! This will be fixed soon.
