@@ -7,6 +7,8 @@ class TomlElement
 {
     private:
         string name;
+        string type;
+        string value;
         TomlElement* parent;//null if its parent is the root
     public:
         virtual TomlElement getParent();

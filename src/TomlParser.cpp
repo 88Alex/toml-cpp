@@ -1,5 +1,5 @@
 #include "TomlParser.h"
-static long TomlParser::parseInteger(string text)
+long TomlParser::parseInteger(string text)
 {
     int index = 0;
     char currChar = text.at(index);
@@ -30,16 +30,16 @@ static long TomlParser::parseInteger(string text)
     }
     return isNegative ? -currNumber : currNumber;
 }
-static bool TomlParser::parseBoolean(string text)
+bool TomlParser::parseBoolean(string text)
 {
     if(text == "true") return true;
     else if(text == "false") return false;
     else throw 2; // 2 = error parsing boolean
 }
-static double TomlParser::parseDouble(string text)
+double TomlParser::parseDouble(string text)
 {
     bool isDecimal = false, isNegative = false;
-    int index = 0, level = 1;
+    int index = 0, level = 1, currNumber = 0;
     char currChar = text.at(index);
     if(currChar == '+')
     {
@@ -78,36 +78,41 @@ static double TomlParser::parseDouble(string text)
         }
     }
 }
-static void TomlParser::clipSpaces(string& text)
+void TomlParser::clipSpaces(string& text)
 {
-    bool isStrMode = true;//We don't want to clip spaces inside strings
+    bool isStrMode = false;//We don't want to clip spaces inside strings
     int index = 0;
     char currChar = text.at(index);
     for(; index < text.length(); index++, currChar = text.at(index))
     {
-        if(isStrMode) break;
-        else if(currChar = '\'' || currChar = '"') isStrMode = true;
-        else if(currChar = ' ' || currChar = '\t')
+        if(isStrMode)
         {
-            front = text.substr(0, index);
-            back = text.substr(index + 1);
+            if(currChar == '\\') index++;
+            else if(currChar == '"') isStrMode = false;
+        }
+        else if(currChar == '\'' || currChar == '"') isStrMode = true;
+        else if(currChar == ' ' || currChar == '\t')
+        {
+            string front = text.substr(0, index);
+            string back = text.substr(index + 1);
             front.append(back);
             text = front;
         }
     }
 }
-static void TomlParser::setFile(string name)
+void TomlParser::setFile(string name)
 {
     fstream newStream(name);
     stream = newStream;
 }
-static void TomlParser::load()
+void TomlParser::load()
 {
-    bool formatStrMode = false, rawStrMode = false, escMode = false, endOfStrMode = false; endOfLine = false;
+    bool formatStrMode = false, rawStrMode = false, escMode = false
+    bool endOfStrMode = false, endOfLine = false;
     string currLine = "";
     string currStr = "";
     TomlHash currHash = null;
-    TomlElement currElement = null;
+    TomlKey currKey = null;
     int lineNumber = 1;
     char currChar;
     for(; !stream.eof(); lineNumber++)//this is the line loop
@@ -116,18 +121,22 @@ static void TomlParser::load()
         endOfLine = false;
         if(formatStrMode || rawStrMode)
         {
-            throw new TomlError("Multiline strings not supported. If you insist, use \"\\n\" instead.", lineNumber);
+            throw new TomlError(
+                "Multiline strings not supported. Use \"\\n\" instead.",
+                lineNumber);
         }
         rawStrMode = false;
         formatStrMode = false;
         getline(stream, currLine);
         clipSpaces(currLine);
-        for(int i=1; i<currLine.length(); i++)//this goes over each individual character
+        for(int i=1; i<currLine.length(); i++)//this goes over each character
         {
             currChar = currLine[i];
             if(endOfLine)
             {
-                throw new TomlError("What are you trying to do with these random characters?", lineNumber);
+                throw new TomlError(
+                    "What are you trying to do with these random characters?",
+                    lineNumber);
             }
             else if(formatStrMode)
             {
@@ -154,7 +163,7 @@ static void TomlParser::load()
                 switch(currChar)
                 {
                     case '#':
-                        goto lineloopstart;//I know right but it's a necessary evil
+                        goto lineloopstart;
                     case '"':
                         formatStrMode = true;
                         break;
@@ -176,38 +185,42 @@ static void TomlParser::load()
                     eos:
                         if(endOfStrMode)
                         {
-                            currElement.type = "STRING";
-                            currElement.value = currStr;
+                            currKey.type = "STRING";
+                            currKey.value = currStr;
                             break;
                         }
                         string name = "";
                         while(currChar != '=')
                         {
-                            name.append(currChar);
+                            name.append(&currChar);
                             i++;
                             currChar = currLine.at(i);
                         }
                         i++;//we go past the =
                         currChar = currLine.at(i);
-                        valueStr = line.substr(i + 1);
+                        string valueStr = currLine.substr(i + 1);
                         try
                         {
                             long value = parseInteger(valueStr);
-                            currElement = new TomlKey(name, valueStr, "INTEGER", currHash);
+                            currKey = new TomlKey(name, valueStr, "INTEGER",
+                                currHash);
                         }
                         catch(int i)
                         {
                             try//This is the only way
                             {
                                 bool value = parseBoolean(valueStr);
-                                currElement = new TomlKey(name, valueStr, "BOOL", currHash);
+                                currKey = new TomlKey(name, valueStr, "BOOL",
+                                    currHash);
                                 catch(int i)
                                 {
                                     try
                                     {
-                                        double value = parseDouble(line.substr(valueStr));
-                                        currElement.value = valueStr;
-                                        currElement = new TomlKey(name, valueStr, "FLOAT", currHash);
+                                        double value = parseDouble(
+                                            line.substr(valueStr));
+                                        currKey.value = valueStr;
+                                        currKey = new TomlKey(name, valueStr,
+                                            "FLOAT", currHash);
                                         catch(int i)
                                         {
                                             //ignore it
@@ -220,4 +233,8 @@ static void TomlParser::load()
             }//end else
         }//end inner for
     }//end outer for
+}
+vector<TomlElement> TomlParser::getElements()
+{
+    return elements;
 }
