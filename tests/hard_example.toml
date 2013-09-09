@@ -19,7 +19,12 @@ test_string = "You'll hate me after this - #"          # " Annoying, isn't it?
             "]",
             # ] Oh yes I did
             ]
-    insane_test_array=["[].#].","[#.=]","#\"[\n.#]\""] # [ " ] Good luck parsing that!
+    insane_test_array=["[].#].", "[#.=]", "#\"[\n.#]\""] # [ " ] Good luck parsing that!
+    even_worse_test_array = ["[.=\"#].=", # [0=]4\"",
+        "==#..][\n]\'.\"=[", "#[][[[[[\n==\"\"=.#.=#[[]", # []=.#=.
+        "[[=]#.]#=.]#[[=##.=#==.]][\"#.][[[\n\n]#]=.#][.[" #=][.\n#'].#==
+        # , "][#].==]#.=[[="
+    ] #, "=#[.]#" ] Yes, that's all syntactically correct!!!
 
 # Each of the following keygroups/key value pairs should produce an error. Uncomment to them to test
 
